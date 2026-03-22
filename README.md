@@ -55,8 +55,8 @@ Chỉnh sửa `.env`:
 ```env
 NODE_ENV=development
 PORT=5000
-MONGODB_URI=mongodb+srv://phamquangvu2308:YOUR_PASSWORD@cluster0.inzif.mongodb.net/
-MONGODB_DB_NAME=sportecommerce
+MONGODB_URI=
+MONGODB_DB_NAME=
 ```
 
 **⚠️ Lưu ý:** Thay thế `YOUR_PASSWORD` bằng password thực của MongoDB Atlas.
