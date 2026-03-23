@@ -1,26 +1,18 @@
-const mongoose = require('mongoose');
-
+const mongoose = require("mongoose");
 
 const connectDB = async () => {
   try {
     const mongoURI = process.env.MONGODB_URI;
-    const dbName = process.env.MONGODB_DB_NAME || 'sportecommerce';
 
-    // Construct full connection URL with database name
-    const fullURI = `${mongoURI}${dbName}`;
+    if (!mongoURI) {
+      throw new Error("MONGODB_URI is not defined in environment variables");
+    }
 
-    const connection = await mongoose.connect(fullURI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-
-    console.log(`✅ MongoDB connected successfully`);
-    console.log(` Database: ${dbName}`);
-    console.log(` Host: ${connection.connection.host}`);
+    const connection = await mongoose.connect(mongoURI);
 
     return connection;
   } catch (error) {
-    console.error(`❌ MongoDB connection error: ${error.message}`);
+    console.error(`MongoDB connection error: ${error.message}`);
     process.exit(1);
   }
 };

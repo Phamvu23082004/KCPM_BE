@@ -1,5 +1,4 @@
 const express = require('express');
-const healthRoutes = require('./health');
 const favouriteRoutes = require('./favourite');
 
 const router = express.Router();
