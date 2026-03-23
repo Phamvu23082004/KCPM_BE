@@ -66,7 +66,7 @@ const repairPlanstSchema = new mongoose.Schema(
       createdAt: "created_at",
       updatedAt: "updated_at",
     },
-    collection: "repairPlans",
+    collection: "RepairPlans",
   }
 );
 
