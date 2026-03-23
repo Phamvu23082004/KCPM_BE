@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema(
       unique: true,
       trim: true,
     },
-    password_hash: {
+    password: {
       type: String,
       required: true,
     },
@@ -22,21 +22,11 @@ const userSchema = new mongoose.Schema(
       enum: ["admin", "technician"],
       required: true,
     },
-    phone: {
-      type: String,
-      default: null,
-      trim: true,
-    },
     email: {
       type: String,
       default: null,
       trim: true,
       lowercase: true,
-    },
-    specialization: {
-      type: String,
-      default: null,
-      trim: true,
     },
     status: {
       type: String,
@@ -50,9 +40,7 @@ const userSchema = new mongoose.Schema(
       updatedAt: "updated_at",
     },
     collection: "Users",
-  }
+  },
 );
-
-userSchema.index({ username: 1 }, { unique: true });
 
 module.exports = mongoose.model("User", userSchema);
