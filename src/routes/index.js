@@ -1,23 +1,8 @@
-const express = require('express');
-const favouriteRoutes = require('./favourite');
+const express = require("express");
+const userRoutes = require("./User.route");
 
 const router = express.Router();
 
-/**
- * API Routes
- * Kết hợp các route từ các module khác nhau
- * 
- * Kiến trúc:
- * /api/favourites - Danh sách yêu thích
- * /api/users - Users (sắp tới)
- */
-
-
-// Favourite routes (ví dụ clean architecture)
-router.use('/favourites', favouriteRoutes);
-
-// Các route khác sẽ được thêm ở đây
-// router.use('/users', userRoutes);
-// router.use('/products', productRoutes);
+router.use("/users", userRoutes);
 
 module.exports = router;
