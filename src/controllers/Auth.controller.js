@@ -6,12 +6,12 @@ const refresh = async (req, res, next) => {
         const {refreshToken} = req.body;
 
         if (!refreshToken) {
-            throw new ApiError(401, 1001, "Thieu refresh token");
+            throw new ApiError(401, 1001, "Thiếu refresh token");
         }
 
         const result = authService.refresh(refreshToken);
 
-        return res.success(result, "Tao moi access token thanh cong!", 200)
+        return res.success(result, "Tạo mới access token thành công", 200)
 
     } catch (error) {
         next(error)

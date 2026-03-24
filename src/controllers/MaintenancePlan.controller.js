@@ -3,9 +3,26 @@ const maintenancePlanService = require("../services/MaintenancePlan.service");
 
 const createMaintenancePlan = async (req, res, next) => {
   try {
-    const { device_id, title, scheduled_date, created_by } = req.body;
-    if (!device_id || !title || !scheduled_date || !created_by) {
-      throw new ApiError(400, 3001, "Thiếu thông tin bắt buộc");
+    const {
+      device_id,
+      title,
+      scheduled_date,
+      assigned_technician_id,
+      created_by,
+    } = req.body;
+
+    if (
+      !device_id ||
+      !title ||
+      !scheduled_date ||
+      !assigned_technician_id ||
+      !created_by
+    ) {
+      throw new ApiError(
+        400,
+        3001,
+        "Thiếu thông tin bắt buộc, cần có thiết bị, tiêu đề, ngày bảo trì, kỹ thuật viên và người tạo",
+      );
     }
 
     const result = await maintenancePlanService.createMaintenancePlan(req.body);
@@ -18,7 +35,11 @@ const createMaintenancePlan = async (req, res, next) => {
 const getAllMaintenancePlans = async (req, res, next) => {
   try {
     const result = await maintenancePlanService.getAllMaintenancePlans();
-    return res.success(result, "Lấy danh sách kế hoạch bảo trì thành công", 200);
+    return res.success(
+      result,
+      "Lấy danh sách kế hoạch bảo trì thành công",
+      200,
+    );
   } catch (error) {
     next(error);
   }
@@ -28,7 +49,7 @@ const getMaintenancePlanById = async (req, res, next) => {
   try {
     const _id = req.params.id;
     if (!_id) {
-      throw new ApiError(400, 3001, "Thiếu thông tin");
+      throw new ApiError(400, 3001, "Thiếu mã kế hoạch bảo trì");
     }
 
     const result = await maintenancePlanService.getMaintenancePlanById(_id);
@@ -37,13 +58,14 @@ const getMaintenancePlanById = async (req, res, next) => {
     next(error);
   }
 };
+
 const updateMaintenancePlan = async (req, res, next) => {
   try {
     const _id = req.params.id;
     const updateData = req.body;
 
     if (!_id) {
-      throw new ApiError(400, 3001, "Thiếu thông tin");
+      throw new ApiError(400, 3001, "Thiếu mã kế hoạch bảo trì");
     }
 
     const planUpdateFields = [
@@ -57,11 +79,7 @@ const updateMaintenancePlan = async (req, res, next) => {
       "completed_at",
     ];
 
-    const historyFields = [
-      "cost",
-      "status_before",
-      "status_after",
-    ];
+    const historyFields = ["cost", "status_before", "status_after"];
 
     const planUpdateData = {};
     planUpdateFields.forEach((field) => {
@@ -77,27 +95,30 @@ const updateMaintenancePlan = async (req, res, next) => {
       }
     });
 
-    if (Object.keys(planUpdateData).length === 0 && Object.keys(historyData).length === 0) {
+    if (
+      Object.keys(planUpdateData).length === 0 &&
+      Object.keys(historyData).length === 0
+    ) {
       throw new ApiError(400, 3002, "Không có dữ liệu hợp lệ để cập nhật");
     }
 
     const result = await maintenancePlanService.updateMaintenancePlan(
       _id,
       planUpdateData,
-      historyData
+      historyData,
     );
+
     return res.success(result, "Cập nhật kế hoạch bảo trì thành công", 200);
   } catch (error) {
     next(error);
   }
 };
-  
 
 const softDeleteMaintenancePlan = async (req, res, next) => {
   try {
     const _id = req.params.id;
     if (!_id) {
-      throw new ApiError(400, 3001, "Thiếu dữ liệu");
+      throw new ApiError(400, 3001, "Thiếu mã kế hoạch bảo trì");
     }
 
     const result = await maintenancePlanService.softDeleteMaintenancePlan(_id);
@@ -113,7 +134,7 @@ const getUpcomingMaintenancePlans = async (req, res, next) => {
     return res.success(
       result,
       "Lấy danh sách kế hoạch bảo trì sắp tới thành công",
-      200
+      200,
     );
   } catch (error) {
     next(error);

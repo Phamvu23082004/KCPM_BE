@@ -51,7 +51,7 @@ const deviceSchema = new mongoose.Schema(
       updatedAt: "updated_at",
     },
     collection: "Devices",
-  }
+  },
 );
 
 deviceSchema.index({

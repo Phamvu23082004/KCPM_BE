@@ -3,9 +3,26 @@ const repairPlanService = require("../services/RepairPlan.service");
 
 const createRepairPlan = async (req, res, next) => {
   try {
-    const { device_id, title, issue_description, created_by } = req.body;
-    if (!device_id || !title || !issue_description || !created_by) {
-      throw new ApiError(400, 5001, "Thiếu thông tin bắt buộc");
+    const {
+      device_id,
+      title,
+      issue_description,
+      assigned_technician_id,
+      created_by,
+    } = req.body;
+
+    if (
+      !device_id ||
+      !title ||
+      !issue_description ||
+      !assigned_technician_id ||
+      !created_by
+    ) {
+      throw new ApiError(
+        400,
+        5001,
+        "Thiếu thông tin bắt buộc, cần có thiết bị, tiêu đề, mô tả lỗi, kỹ thuật viên và người tạo",
+      );
     }
 
     const result = await repairPlanService.createRepairPlan(req.body);
@@ -18,7 +35,11 @@ const createRepairPlan = async (req, res, next) => {
 const getAllRepairPlans = async (req, res, next) => {
   try {
     const result = await repairPlanService.getAllRepairPlans();
-    return res.success(result, "Lấy danh sách yêu cầu sửa chữa thành công", 200);
+    return res.success(
+      result,
+      "Lấy danh sách yêu cầu sửa chữa thành công",
+      200,
+    );
   } catch (error) {
     next(error);
   }
@@ -28,7 +49,7 @@ const getRepairPlanById = async (req, res, next) => {
   try {
     const _id = req.params.id;
     if (!_id) {
-      throw new ApiError(400, 5001, "Thiếu thông tin");
+      throw new ApiError(400, 5002, "Thiếu mã yêu cầu sửa chữa");
     }
 
     const result = await repairPlanService.getRepairPlanById(_id);
@@ -44,7 +65,7 @@ const updateRepairPlan = async (req, res, next) => {
     const updateData = req.body;
 
     if (!_id) {
-      throw new ApiError(400, 5001, "Thiếu thông tin");
+      throw new ApiError(400, 5003, "Thiếu mã yêu cầu sửa chữa");
     }
 
     const planUpdateFields = [
@@ -53,16 +74,14 @@ const updateRepairPlan = async (req, res, next) => {
       "priority",
       "status",
       "assigned_technician_id",
+      "assigned_at",
       "repair_result",
+      "cost",
       "notes",
       "completed_at",
     ];
 
-    const historyFields = [
-      "cost",
-      "status_before",
-      "status_after",
-    ];
+    const historyFields = ["cost", "status_before", "status_after"];
 
     const planUpdateData = {};
     planUpdateFields.forEach((field) => {
@@ -78,14 +97,17 @@ const updateRepairPlan = async (req, res, next) => {
       }
     });
 
-    if (Object.keys(planUpdateData).length === 0 && Object.keys(historyData).length === 0) {
-      throw new ApiError(400, 5002, "Không có dữ liệu hợp lệ để cập nhật");
+    if (
+      Object.keys(planUpdateData).length === 0 &&
+      Object.keys(historyData).length === 0
+    ) {
+      throw new ApiError(400, 5004, "Không có dữ liệu hợp lệ để cập nhật");
     }
 
     const result = await repairPlanService.updateRepairPlan(
       _id,
       planUpdateData,
-      historyData
+      historyData,
     );
     return res.success(result, "Cập nhật yêu cầu sửa chữa thành công", 200);
   } catch (error) {
@@ -97,7 +119,7 @@ const softDeleteRepairPlan = async (req, res, next) => {
   try {
     const _id = req.params.id;
     if (!_id) {
-      throw new ApiError(400, 5001, "Thiếu dữ liệu");
+      throw new ApiError(400, 5005, "Thiếu mã yêu cầu sửa chữa");
     }
 
     const result = await repairPlanService.softDeleteRepairPlan(_id);
@@ -111,11 +133,11 @@ const getRepairHistoryByDevice = async (req, res, next) => {
   try {
     const deviceId = req.params.deviceId;
     if (!deviceId) {
-      throw new ApiError(400, 5001, "Thiếu ID thiết bị");
+      throw new ApiError(400, 5006, "Thiếu mã thiết bị");
     }
 
     const result = await repairPlanService.getRepairHistoryByDevice(deviceId);
-    return res.success(result, "Lấy lịch sửa chữa thành công", 200);
+    return res.success(result, "Lấy lịch sử sửa chữa thành công", 200);
   } catch (error) {
     next(error);
   }
@@ -125,16 +147,20 @@ const getRepairPlansByStatus = async (req, res, next) => {
   try {
     const status = req.query.status;
     if (!status) {
-      throw new ApiError(400, 5001, "Thiếu trạng thái");
+      throw new ApiError(400, 5007, "Thiếu trạng thái");
     }
 
     const validStatuses = ["new", "assigned", "in_progress", "completed"];
     if (!validStatuses.includes(status)) {
-      throw new ApiError(400, 5004, "Trạng thái không hợp lệ");
+      throw new ApiError(400, 5008, "Trạng thái không hợp lệ");
     }
 
     const result = await repairPlanService.getRepairPlansByStatus(status);
-    return res.success(result, "Lấy yêu cầu theo trạng thái thành công", 200);
+    return res.success(
+      result,
+      "Lấy danh sách yêu cầu sửa chữa theo trạng thái thành công",
+      200,
+    );
   } catch (error) {
     next(error);
   }

@@ -29,7 +29,7 @@ const maintenancePlanSchema = new mongoose.Schema(
     assigned_technician_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      default: null,
+      required: true,
     },
     created_by: {
       type: mongoose.Schema.Types.ObjectId,
@@ -61,7 +61,7 @@ const maintenancePlanSchema = new mongoose.Schema(
       updatedAt: "updated_at",
     },
     collection: "MaintenancePlans",
-  }
+  },
 );
 
 maintenancePlanSchema.index({ device_id: 1 });

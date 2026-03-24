@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const repairPlanstSchema = new mongoose.Schema(
+const repairPlanSchema = new mongoose.Schema(
   {
     device_id: {
       type: mongoose.Schema.Types.ObjectId,
@@ -75,12 +75,11 @@ const repairPlanstSchema = new mongoose.Schema(
       updatedAt: "updated_at",
     },
     collection: "RepairPlans",
-  }
+  },
 );
 
-// repairPlanstSchema.index({ ticket_code: 1 }, { unique: true });
-repairPlanstSchema.index({ device_id: 1 });
-repairPlanstSchema.index({ assigned_technician_id: 1 });
-repairPlanstSchema.index({ status: 1, priority: 1 });
+repairPlanSchema.index({ device_id: 1 });
+repairPlanSchema.index({ assigned_technician_id: 1 });
+repairPlanSchema.index({ status: 1, priority: 1 });
 
-module.exports = mongoose.model("RepairPlan", repairPlanstSchema);
+module.exports = mongoose.model("RepairPlan", repairPlanSchema);

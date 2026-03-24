@@ -61,7 +61,7 @@ const workHistorySchema = new mongoose.Schema(
       createdAt: "created_at",
       updatedAt: false,
     },
-    collection: "workHistory",
+    collection: "WorkHistory",
   }
 );
 
