@@ -50,6 +50,10 @@ const maintenancePlanSchema = new mongoose.Schema(
       default: null,
       trim: true,
     },
+    is_deleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: {
