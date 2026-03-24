@@ -1,12 +1,42 @@
 const express = require("express");
-const DeviceController = require("../controllers/Device.controller")
+const DeviceController = require("../controllers/Device.controller");
+const { authenticate, authorize } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 
-router.get("/", DeviceController.getAllDevices);
-router.get("/:id", DeviceController.getDevicebyId);
-router.post("/" , DeviceController.createDevice);
-router.patch("/:id", DeviceController.updateDevice);
-router.delete("/:id" , DeviceController.softDeleteDevice);
+router.get(
+  "/",
+  authenticate,
+  authorize("admin", "technician"),
+  DeviceController.getAllDevices,
+);
 
-module.exports = router 
+router.get(
+  "/:id",
+  authenticate,
+  authorize("admin", "technician"),
+  DeviceController.getDevicebyId,
+);
+
+router.post(
+  "/",
+  authenticate,
+  authorize("admin", "technician"),
+  DeviceController.createDevice,
+);
+
+router.patch(
+  "/:id",
+  authenticate,
+  authorize("admin", "technician"),
+  DeviceController.updateDevice,
+);
+
+router.delete(
+  "/:id",
+  authenticate,
+  authorize("admin", "technician"),
+  DeviceController.softDeleteDevice,
+);
+
+module.exports = router;
