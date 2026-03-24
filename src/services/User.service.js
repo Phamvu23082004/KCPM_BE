@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/User.model");
 const ApiError = require("../utils/ApiError");
+const { generateAccessToken, generateRefreshToken } = require("../utils/jwt")
 
 const SALT_ROUNDS = 10;
 
@@ -125,6 +126,18 @@ const loginUser = async ({ username, password }) => {
     throw new ApiError(403, 1008, "Tài khoản đã bị khóa hoặc không hoạt động");
   }
 
+  const accessToken = generateAccessToken({
+    _id: user._id,
+    username: user.username,
+    role: user.role,
+  });
+
+  const refreshToken = generateRefreshToken({
+    _id: user._id,
+    username: user.username,
+    role: user.role,
+  });
+
   return {
     _id: user._id,
     full_name: user.full_name,
@@ -134,6 +147,8 @@ const loginUser = async ({ username, password }) => {
     status: user.status,
     created_at: user.created_at,
     updated_at: user.updated_at,
+    accessToken: accessToken,
+    refreshToken: refreshToken
   };
 };
 

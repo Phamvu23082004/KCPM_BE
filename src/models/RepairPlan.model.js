@@ -60,6 +60,14 @@ const repairPlanstSchema = new mongoose.Schema(
       default: null,
       trim: true,
     },
+    is_deleted: {
+      type: Boolean,
+      default: false,
+    },
+    deleted_at: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: {
@@ -70,7 +78,7 @@ const repairPlanstSchema = new mongoose.Schema(
   }
 );
 
-repairPlanstSchema.index({ ticket_code: 1 }, { unique: true });
+// repairPlanstSchema.index({ ticket_code: 1 }, { unique: true });
 repairPlanstSchema.index({ device_id: 1 });
 repairPlanstSchema.index({ assigned_technician_id: 1 });
 repairPlanstSchema.index({ status: 1, priority: 1 });
