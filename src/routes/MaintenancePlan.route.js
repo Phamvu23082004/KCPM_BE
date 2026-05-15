@@ -7,21 +7,21 @@ const router = express.Router();
 router.get(
   "/",
   authenticate,
-  authorize("admin"),
+  authorize("admin", "technician"),
   MaintenancePlanController.getAllMaintenancePlans,
 );
 
 router.get(
   "/upcoming/list",
   authenticate,
-  authorize("admin"),
+  authorize("admin", "technician"),
   MaintenancePlanController.getUpcomingMaintenancePlans,
 );
 
 router.get(
   "/:id",
   authenticate,
-  authorize("admin"),
+  authorize("admin", "technician"),
   MaintenancePlanController.getMaintenancePlanById,
 );
 
@@ -32,18 +32,18 @@ router.post(
   MaintenancePlanController.createMaintenancePlan,
 );
 
-router.patch(
-  "/:id",
-  authenticate,
-  authorize("admin"),
-  MaintenancePlanController.updateMaintenancePlan,
-);
-
 router.delete(
   "/:id",
   authenticate,
   authorize("admin"),
   MaintenancePlanController.softDeleteMaintenancePlan,
+);
+
+router.patch(
+  "/:id",
+  authenticate,
+  authorize("admin", "technician"),
+  MaintenancePlanController.updateMaintenancePlan,
 );
 
 module.exports = router;

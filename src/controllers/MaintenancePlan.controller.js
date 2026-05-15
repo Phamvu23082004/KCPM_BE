@@ -34,7 +34,9 @@ const createMaintenancePlan = async (req, res, next) => {
 
 const getAllMaintenancePlans = async (req, res, next) => {
   try {
-    const result = await maintenancePlanService.getAllMaintenancePlans();
+    const result = await maintenancePlanService.getAllMaintenancePlans(
+      req.user,
+    );
     return res.success(
       result,
       "Lấy danh sách kế hoạch bảo trì thành công",

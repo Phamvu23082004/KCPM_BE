@@ -7,28 +7,28 @@ const router = express.Router();
 router.get(
   "/",
   authenticate,
-  authorize("admin"),
+  authorize("admin", "technician"),
   RepairPlanController.getAllRepairPlans
 );
 
 router.get(
   "/status/filter",
   authenticate,
-  authorize("admin"),
+  authorize("admin", "technician"),
   RepairPlanController.getRepairPlansByStatus
 );
 
 router.get(
   "/device/:deviceId/history",
   authenticate,
-  authorize("admin"),
+  authorize("admin", "technician"),
   RepairPlanController.getRepairHistoryByDevice
 );
 
 router.get(
   "/:id",
   authenticate,
-  authorize("admin"),
+  authorize("admin", "technician"),
   RepairPlanController.getRepairPlanById
 );
 
@@ -39,18 +39,18 @@ router.post(
   RepairPlanController.createRepairPlan
 );
 
-router.patch(
-  "/:id",
-  authenticate,
-  authorize("admin"),
-  RepairPlanController.updateRepairPlan
-);
-
 router.delete(
   "/:id",
   authenticate,
   authorize("admin"),
   RepairPlanController.softDeleteRepairPlan
+);
+
+router.patch(
+  "/:id",
+  authenticate,
+  authorize("admin", "technician"),
+  RepairPlanController.updateRepairPlan
 );
 
 module.exports = router;

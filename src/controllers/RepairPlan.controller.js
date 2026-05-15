@@ -34,7 +34,7 @@ const createRepairPlan = async (req, res, next) => {
 
 const getAllRepairPlans = async (req, res, next) => {
   try {
-    const result = await repairPlanService.getAllRepairPlans();
+    const result = await repairPlanService.getAllRepairPlans(req.user);
     return res.success(
       result,
       "Lấy danh sách yêu cầu sửa chữa thành công",

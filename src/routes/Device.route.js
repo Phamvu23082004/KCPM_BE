@@ -21,21 +21,21 @@ router.get(
 router.post(
   "/",
   authenticate,
-  authorize("admin", "technician"),
+  authorize("admin"),
   DeviceController.createDevice,
 );
 
 router.patch(
   "/:id",
   authenticate,
-  authorize("admin", "technician"),
+  authorize("admin"),
   DeviceController.updateDevice,
 );
 
 router.delete(
   "/:id",
   authenticate,
-  authorize("admin", "technician"),
+  authorize("admin"),
   DeviceController.softDeleteDevice,
 );
 

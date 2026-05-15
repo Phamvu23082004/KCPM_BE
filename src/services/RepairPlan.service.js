@@ -137,9 +137,15 @@ const createRepairPlan = async (planData) => {
   }
 };
 
-const getAllRepairPlans = async () => {
+const getAllRepairPlans = async (currentUser) => {
   try {
-    const plans = await RepairPlan.find({ is_deleted: false })
+    const filter = { is_deleted: false };
+
+    if (currentUser.role === "technician") {
+      filter.assigned_technician_id = currentUser._id;
+    }
+
+    const plans = await RepairPlan.find(filter)
       .populate("device_id", "device_name")
       .populate("assigned_technician_id", "username full_name")
       .populate("created_by", "username full_name")
